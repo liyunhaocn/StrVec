@@ -11,6 +11,11 @@ namespace util {
 		Vector(size_t _len);
 		Vector(size_t _len, int val);
 
+		Vector(const Vector& _Right) {
+			
+			_data;
+		}
+
 		int& operator [](size_t index);
 
 		void push_back(const int& val);
@@ -28,6 +33,7 @@ namespace util {
 
 		bool reAlloc(const int len);
 	};
+
 }
 
 

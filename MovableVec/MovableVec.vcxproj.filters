@@ -29,5 +29,8 @@
     <ClInclude Include="..\util\Vector.h">
       <Filter>util</Filter>
     </ClInclude>
+    <ClInclude Include="..\util\funGlobal.h">
+      <Filter>util</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
