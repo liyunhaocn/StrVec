@@ -1,5 +1,6 @@
 ﻿#include <iostream>
 #include <vector>
+#include <algorithm>
 #include "../util/Vector.h"
 #include "../util/funGlobal.h"
 
@@ -24,6 +25,8 @@ int main()
     for (int i = 0; i < v3.size(); ++i) {
         println(v3[i]);
     }
+
+    std::swap(v3,v4);
 
     int a = 10;
     println("a", a);

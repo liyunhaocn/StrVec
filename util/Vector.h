@@ -24,6 +24,11 @@ namespace util {
 		Vector(size_t _len, int val);
 		Vector(const Vector& lval);
 
+		Vector(Vector&& rval)noexcept;
+
+		Vector& operator = (const Vector& lval);
+		Vector& operator = (Vector&& rval) noexcept;
+
 		void push_back(const int& val);
 
 		void show();
@@ -32,9 +37,9 @@ namespace util {
 		
 	private:
 
-		int* _data;
-		size_t _len;
-		size_t _cap;
+		pointer _data;
+		size_type _len;
+		size_type _cap;
 
 		bool reAlloc(const int len);
 	};
