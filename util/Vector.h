@@ -9,10 +9,12 @@ namespace util {
 	class Vector {
 	public:
 
-		using value_type	= int;
-		using reference		= value_type&;
-		using pointer		= value_type*;
-		using size_type		= size_t;
+		using value_type		= int;
+		using reference			= value_type&;
+		using pointer			= value_type*;
+		using size_type			= size_t;
+		using iterator			= value_type*;
+		using const_iterator	= value_type*;
 
 		size_t capacity();
 		size_t size() const;
@@ -20,28 +22,37 @@ namespace util {
 		int& operator [](size_t index) const;
 
 		Vector();
-		Vector(size_t _len);
-		Vector(size_t _len, int val);
+		Vector(size_type n);
+		Vector(size_type n, value_type val);
 		Vector(const Vector& lval);
 
-		Vector(Vector&& rval)noexcept;
+		Vector(Vector&& rval) noexcept;
 
 		Vector& operator = (const Vector& lval);
 		Vector& operator = (Vector&& rval) noexcept;
 
-		void push_back(const int& val);
+		void push_back(const value_type& val);
 
 		void show();
 
 		~Vector();
 		
+
+		iterator begin() {
+			return _begin;
+		}
+		
+		iterator end() {
+			return _end;
+		}
+
 	private:
 
-		pointer _data;
-		size_type _len;
-		size_type _cap;
+		iterator _begin;
+		iterator _end;
+		iterator _cap;
 
-		bool reAlloc(const int len);
+		pointer allocate(size_type n);
 	};
 
 }

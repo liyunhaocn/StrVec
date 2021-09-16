@@ -22,8 +22,8 @@ int main()
     v3.show();
     v4.show();
 
-    for (int i = 0; i < v3.size(); ++i) {
-        println(v3[i]);
+    for (auto i : v3) {
+        std::cout << i << std::endl;
     }
 
     std::swap(v3,v4);
