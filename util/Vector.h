@@ -16,14 +16,14 @@ namespace util {
 		using iterator			= value_type*;
 		using const_iterator	= value_type*;
 
-		size_t capacity();
-		size_t size() const;
+		size_type capacity();
+		size_type size() const;
 
 		int& operator [](size_t index) const;
 
 		Vector();
-		Vector(size_type n);
-		Vector(size_type n, value_type val);
+		explicit Vector(size_type n);
+		explicit Vector(size_type n, value_type val);
 		Vector(const Vector& lval);
 
 		Vector(Vector&& rval) noexcept;

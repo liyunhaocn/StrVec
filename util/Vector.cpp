@@ -5,13 +5,14 @@ namespace util {
 
 	void Vector::push_back(const value_type& val) {
 		*_end = val;
+		
 	}
 
-	size_t Vector::capacity() {
+	Vector::size_type Vector::capacity() {
 		return static_cast<size_type>(_cap - _begin);
 	}
 	
-	size_t Vector::size() const {
+	Vector::size_type Vector::size() const {
 		return static_cast<size_type>(_end - _begin);
 	}
 
