@@ -1,4 +1,4 @@
-﻿#include <iostream>
+#include <iostream>
 #include <vector>
 #include <algorithm>
 #include <list>
@@ -19,7 +19,7 @@ using std::endl;
 bool test_max() {
     auto m = std::max({ 1,2,43,4,5,6,7,8,2,2, });
     debug(m)
-    return true;
+        return true;
 }
 
 bool test_list() {
@@ -49,13 +49,13 @@ void showArr(T& arr) {
 bool test_vector() {
 
     std::vector<int> v0(10, 7);
-    
+
     struct pos {
         int x;
         int y;
     };
     //tstd::vector<tstd::vector<int>> v3;
-    
+
     auto test_push_back = []() {
 
         tstd::vector<int> v = { 1,23,4,56,65 };
@@ -66,14 +66,14 @@ bool test_vector() {
         for (int i = 0; i < 100; ++i) {
             //showArr(v);
             debug(v.size())
-            debug(v.capacity())
-            v.push_back(i);
+                debug(v.capacity())
+                v.push_back(i);
         }
     };
 
     auto test_sort = []() {
-        tstd::vector<int> v = { 1,23,4,56,65 }; 
-        std::sort(v.begin(),v.end());
+        tstd::vector<int> v = { 1,23,4,56,65 };
+        std::sort(v.begin(), v.end());
         showArr(v);
     };
 
