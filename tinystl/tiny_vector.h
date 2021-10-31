@@ -3,11 +3,12 @@
 
 #include <iostream>
 #include "util.h"
+#include "allocator.h"
 using util::println;
 
 /// <summary>
-/// 
-/// 接口名称以及返回类型参考：http://www.cplusplus.com/reference/vector/vector/?kw=vector
+/// 改文件
+/// 接口名称以及返回类型参考：https://en.cppreference.com/w/cpp/container/vector
 /// 
 /// </summary>
 
@@ -17,14 +18,23 @@ template<typename T>
 class vector {
 public:
 
-	using value_type = T;
-	using reference = value_type&;
-	using const_reference = const value_type&;
-	using pointer = value_type*;
-	using size_type = size_t;
-	using iterator = value_type*;
-	using const_iterator = value_type*;
+	using allocator_type	= allocator<T>;
+	using data_allocator	= allocator<T>;
 
+	using value_type		= typename allocator<T>::value_type;
+	using size_type			= typename allocator<T>::size_type;
+	using difference_type	= typename allocator<T>::difference_type;
+
+	using reference			= typename allocator<T>::reference;
+	using const_reference	= typename allocator<T>::const_reference;
+	using pointer			= typename allocator<T>::pointer;
+	using const_pointer		= typename allocator<T>:: const_pointer;
+	
+	using iterator			= value_type*;
+	using const_iterator	= const value_type*;
+
+	/*typedef mystl::reverse_iterator<iterator>        reverse_iterator;
+	typedef mystl::reverse_iterator<const_iterator>  const_reverse_iterator;*/
 	
 #pragma region Capacity
 
@@ -114,9 +124,6 @@ public:
 
 	bool expand();
 
-	void push_back(const_reference val);
-
-	
 #pragma region Iterators:
 
 	iterator begin() noexcept {
@@ -137,27 +144,83 @@ public:
 
 #pragma endregion
 
+#pragma region Modifiers
+
+	// TODO[lyh][1]: Modifiers
+
+	void clear() noexcept{
+		
+	}
+
+	iterator insert(iterator pos,const_reference val) {
+	
+	}
+
+	iterator insert(const_iterator pos,const_reference val) {
+	
+	}
+
+	iterator insert(const_iterator pos, T&& value) {}
+
+	template< class... Args >
+	iterator emplace(const_iterator pos, Args&&... args) {}
+
+	iterator erase(iterator pos) {}
+	iterator erase(const_iterator pos) {}
+
+	iterator erase(iterator first, iterator last) {}
+
+	iterator erase(const_iterator first, const_iterator last) {}
+
+
+	void push_back(const_reference val);
+
+	void push_back(T&& val) {
+		push_back(val);
+	}
+
+	template< class... Args >
+	void emplace_back(Args&&... args) {}
+
+	void pop_back();
+
+	void resize(size_type count) {}
+
+	void resize(size_type count, T value = T()) {}
+	void resize(size_type count, const value_type& value) {}
+
+	void swap(vector& other) {}
+
+#pragma endregion 
+// Modifiers
+
+	/*void destory_one(pointer ptr);
+
+	void destory(pointer ptr);*/
+
 	~vector();
+
 private:
 
 	iterator _begin;
 	iterator _end;
 	iterator _cap;
 
-	pointer allocate(size_type n);
 };
 
 template<typename T>
 bool vector<T>::expand() {
 	
 	println("call:expand()");
+	println("value_type.name: ", typeid(value_type).name());
 	size_type new_size = std::max(size() + 1, capacity() * 2);
-	auto new_begin = allocate(new_size);
+	auto new_begin = allocator<value_type>::allocate(new_size);
 	auto new_end = new_begin;
 	auto new_cap = new_begin + new_size;
 
 	for (auto i = _begin; i != _end; ++i) {
-		*new_end = *i;
+		util::construct(new_end,*i);
+		//*new_end = *i;
 		++new_end;
 	}
 	delete [] _begin;
@@ -175,10 +238,9 @@ void vector<T>::push_back(const_reference val) {
 	if (_end == _cap) {
 		expand();
 	}
-	else {
-		*_end = val;
-		++_end;
-	}
+	util::construct(_end,val);
+	//*_end = val;
+	++_end;
 }
 
 //template<typename T>
@@ -198,7 +260,7 @@ vector<T>::vector() :_begin(nullptr), _end(nullptr), _cap(nullptr) {
 template<typename T>
 vector<T>::vector(size_type n) {
 	println("call:Vector(size_t _len)");
-	_begin = allocate(n);
+	_begin = allocator<value_type>::allocate(n);
 	_end = _begin + n;
 	_cap = _begin + n;
 	std::fill(_begin, _end, value_type());
@@ -211,11 +273,11 @@ vector<T>::vector(std::initializer_list<value_type> li) {
 
 	size_type n = li.end() - li.begin();
 
-	_begin = allocate(n);
+	_begin = allocator<value_type>::allocate(n);
 	_end = begin();
 	_cap = _begin + n;
 	for (auto& i : li) {
-		*_end = i;
+		util::construct(_end ,i);
 		++_end;
 	}
 }
@@ -224,7 +286,7 @@ template<typename T>
 vector<T>::vector(size_type n, value_type val) {
 
 	println("call:Vector(size_t _len, int val)");
-	_begin = allocate(n);
+	_begin = allocator<value_type>::allocate(n);
 	_end = _begin + n;
 	_cap = _begin + n;
 	std::fill(_begin, _end, val);
@@ -235,12 +297,12 @@ vector<T>::vector(const vector<T>& lval) {
 
 	println("call:Vector(const Vector& lval)");
 	size_type n = lval.size();
-	_begin = allocate(n);
-	_end = _begin + n;
+	_begin = allocator<value_type>::allocate(n);
 	_cap = _begin + n;
-
+	_end = _begin;
 	for (size_t i = 0; i < lval.size(); ++i) {
-		(*this)[i] = lval[i];
+		util::construct(_end, lval[i]);
+		++_end;
 	}
 }
 
@@ -261,7 +323,7 @@ vector<T>& vector<T>::operator = (const vector<T>& lval) {
 	if (this != &lval) {
 		delete[] _begin;
 		size_type n = lval.size();
-		_begin = allocate(n);
+		_begin = allocator<value_type>::allocate(n);
 		_end = _begin + n;
 		_cap = _begin + n;
 
@@ -291,28 +353,26 @@ vector<T>& vector<T>::operator = (vector<T>&& rval) noexcept {
 	return *this;
 }
 
-template<typename T>
-typename vector<T>::pointer
-vector<T>::allocate(size_type n) {
-	if (n == 0)
-		return nullptr;
-	return static_cast<pointer>(::operator new(n * sizeof(value_type)));
-}
 
 template<typename T>
 vector<T>::~vector() {
 
 	println("call:~Vector()");
 	println("_begin", _begin);
+
 	println("_begin == nullptr",_begin == nullptr);
-	if (_begin) {
-
-		delete[]  _begin;
-
-		_begin = nullptr;
-		_end = nullptr;
-		_cap = nullptr;
+	if (typeid(value_type).name() == typeid(int).name()) {
+		;
 	}
+	else {
+		
+	}
+
+	delete[] _begin;
+
+	_begin = nullptr;
+	_end = nullptr;
+	_cap = nullptr;
 }
 
 }

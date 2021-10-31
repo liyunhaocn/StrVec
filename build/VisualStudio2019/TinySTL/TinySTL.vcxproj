@@ -141,6 +141,11 @@
   <ItemGroup>
     <ClCompile Include="..\..\..\test\test.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\tinystl\allocator.h" />
+    <ClInclude Include="..\..\..\tinystl\tiny_vector.h" />
+    <ClInclude Include="..\..\..\tinystl\util.h" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

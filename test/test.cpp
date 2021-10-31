@@ -6,6 +6,7 @@
 #include <cstdarg>
 #include "../tinystl/tiny_vector.h"
 #include "../tinystl/util.h"
+#include "../tinystl/allocator.h"
 
 #define debug(x) std::cout<<#x<<": "<<(x)<<std::endl;
 #pragma warning(disable:4996)
@@ -48,39 +49,21 @@ void showArr(T& arr) {
 
 bool test_vector() {
 
-    std::vector<int> v0(10, 7);
-
-    struct pos {
-        int x;
-        int y;
-    };
-    //tstd::vector<tstd::vector<int>> v3;
-
-    auto test_push_back = []() {
-
-        tstd::vector<int> v = { 1,23,4,56,65 };
-        v[3] = 10000;
-
-        showArr(v);
-
-        for (int i = 0; i < 100; ++i) {
-            //showArr(v);
-            debug(v.size())
-                debug(v.capacity())
-                v.push_back(i);
-        }
-    };
-
-    auto test_sort = []() {
-        tstd::vector<int> v = { 1,23,4,56,65 };
-        std::sort(v.begin(), v.end());
-        showArr(v);
-    };
-
-    test_sort();
-
+    tstd::vector<tstd::vector<int>> v2;
+    v2.push_back({ 1,2 });
+    v2.push_back({ 1,2 });
     return true;
 
+}
+
+void test_destory() {
+
+    tstd::vector<int> v2 = { 1,2,3 };
+
+    for (auto i : v2) {
+        cout << i << " ";
+    }
+    cout << endl;
 }
 
 int main()
@@ -90,7 +73,12 @@ int main()
     // test_list();
     // commit 1
     // commit 2
+    
+    //std::vector<int>v;
+    //debug(util::getNameOfT(tstd::vector<int>::value_type{}));
+
     test_vector();
+    //test_destory();
 
     return 0;
 }

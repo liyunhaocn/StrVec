@@ -2,6 +2,7 @@
 #define CN_HUST_LYH_UTIL_H
 
 #include <iostream>
+#include <string>
 
 namespace util {
 
@@ -30,6 +31,19 @@ namespace util {
 		std::cout << std::endl;
 		va_end(vl);
 		return 0;
+	}
+
+	template<typename T>
+	bool construct(T* ptr,T val) {
+		println("construct: ",typeid(T).name());
+		println("ptr: ",ptr);
+		::new(ptr)T(val);
+		return true;
+	}
+
+	template<typename T>
+	std::string getNameOfT(T t) {
+		return typeid(T).name();
 	}
 }
 #endif //CN_HUST_LYH_UTIL_H

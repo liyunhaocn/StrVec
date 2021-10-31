@@ -4,10 +4,24 @@
     <Filter Include="source">
       <UniqueIdentifier>{57affdc0-6fe7-4ad4-947d-7b267a4eb505}</UniqueIdentifier>
     </Filter>
+    <Filter Include="tinystl">
+      <UniqueIdentifier>{75164d3b-d573-42d4-b536-292f0ac51cde}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\test\test.cpp">
       <Filter>source</Filter>
     </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\tinystl\tiny_vector.h">
+      <Filter>tinystl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\tinystl\util.h">
+      <Filter>tinystl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\tinystl\allocator.h">
+      <Filter>tinystl</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
