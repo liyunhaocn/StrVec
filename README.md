@@ -1,5 +1,4 @@
 # TinyVec
-===============
 
 一个string类
 和一个vector，实现std标准中所有接口
@@ -16,7 +15,7 @@
 -------
 - [x] 加入allocator，初步采用了arr new，之后改为operator new
 
-源
+
 致谢
 ------------
 xxx
