@@ -172,7 +172,6 @@ public:
 
 	iterator erase(const_iterator first, const_iterator last) {}
 
-
 	void push_back(const_reference val);
 
 	void push_back(T&& val) {
