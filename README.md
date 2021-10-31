@@ -14,6 +14,8 @@
 更新日志
 -------
 - [x] 加入allocator，初步采用了arr new，之后改为operator new
+- [x] 新建basic_string
+- [x] string = basic_string<char>
 
 
 致谢
