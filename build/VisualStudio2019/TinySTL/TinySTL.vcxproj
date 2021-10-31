@@ -143,6 +143,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\tinystl\allocator.h" />
+    <ClInclude Include="..\..\..\tinystl\tiny_basic_string.h" />
+    <ClInclude Include="..\..\..\tinystl\tiny_string.h" />
     <ClInclude Include="..\..\..\tinystl\tiny_vector.h" />
     <ClInclude Include="..\..\..\tinystl\util.h" />
   </ItemGroup>

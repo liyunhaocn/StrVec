@@ -7,6 +7,7 @@
 #include "../tinystl/tiny_vector.h"
 #include "../tinystl/util.h"
 #include "../tinystl/allocator.h"
+#include "../tinystl/tiny_string.h"
 
 #define debug(x) std::cout<<#x<<": "<<(x)<<std::endl;
 #pragma warning(disable:4996)
@@ -77,8 +78,9 @@ int main()
     //std::vector<int>v;
     //debug(util::getNameOfT(tstd::vector<int>::value_type{}));
 
-    test_vector();
+    //test_vector();
     //test_destory();
-
+    tstd::string s;
+    tstd::string::value_type;
     return 0;
 }

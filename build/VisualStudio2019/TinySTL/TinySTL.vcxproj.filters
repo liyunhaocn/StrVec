@@ -23,5 +23,11 @@
     <ClInclude Include="..\..\..\tinystl\allocator.h">
       <Filter>tinystl</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\tinystl\tiny_string.h">
+      <Filter>tinystl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\tinystl\tiny_basic_string.h">
+      <Filter>tinystl</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
