@@ -4,12 +4,12 @@
 #include <list>
 #include <cstdio>
 #include <cstdarg>
+#include <stack>
 #include "../tinystl/tiny_vector.h"
 #include "../tinystl/util.h"
 #include "../tinystl/allocator.h"
 #include "../tinystl/tiny_string.h"
 
-#define debug(x) std::cout<<#x<<": "<<(x)<<std::endl;
 #pragma warning(disable:4996)
 
 using util::println;
@@ -50,6 +50,18 @@ void showArr(T& arr) {
 
 bool test_vector() {
 
+    std::stack<int, tstd::vector<int>>st;
+
+    st.push(1);
+    st.push(2);
+    st.push(3);
+
+    while (!st.empty())
+    {
+        debug(st.top())
+            st.pop();
+    }
+
     tstd::vector<tstd::vector<int>> v2;
     v2.push_back({ 1,2 });
     v2.push_back({ 1,2 });
@@ -80,7 +92,10 @@ int main()
 
     //test_vector();
     //test_destory();
+    /*tstd::string s;
+    tstd::string::value_type;*/
+
     tstd::string s;
-    tstd::string::value_type;
+
     return 0;
 }

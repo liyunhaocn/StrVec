@@ -4,10 +4,12 @@
 #include <iostream>
 #include "util.h"
 #include "allocator.h"
+#include "loging.h"
+
 using util::println;
 
 /// <summary>
-/// 改文件
+/// 这个头文件实现vector
 /// 接口名称以及返回类型参考：https://en.cppreference.com/w/cpp/container/vector
 /// 
 /// </summary>
@@ -372,6 +374,15 @@ vector<T>::~vector() {
 	_begin = nullptr;
 	_end = nullptr;
 	_cap = nullptr;
+}
+
+
+template<typename T>
+void vector<T>::pop_back() {
+	if (_end != _begin) {
+		--_end;
+	}
+	debug("pop_back()")
 }
 
 }
