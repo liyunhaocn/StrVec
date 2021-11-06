@@ -5,12 +5,21 @@
 #include <cstdio>
 #include <cstdarg>
 #include <stack>
-#include "../tinystl/tiny_vector.h"
-#include "../tinystl/util.h"
-#include "../tinystl/allocator.h"
-#include "../tinystl/tiny_string.h"
+#include <string>
+
+#include <tinystl/tiny_allocator.h>
+#include <tinystl/tiny_vector.h>
+#include <tinystl/tiny_loging.h>
+#include <tinystl/tiny_util.h>
+#include <tinystl/tiny_string.h>
 
 #pragma warning(disable:4996)
+
+#define SUFFIX(msg) std::string(msg).append("  <")\
+                    .append(__FILENAME__).append("> <").append(__FUNCTION__)\
+                    .append("> <").append(std::to_string(__LINE__))\
+                    .append(">").c_str()
+
 
 using util::println;
 using std::cin;
@@ -20,15 +29,15 @@ using std::endl;
 
 bool test_max() {
     auto m = std::max({ 1,2,43,4,5,6,7,8,2,2, });
-    debug(m)
-        return true;
+    spdlog::info("m: {}",m);
+    return true;
 }
 
 bool test_list() {
 
     std::list<int> li = { 1,2,4,5,6,7 };
     for (auto i : li) {
-        debug(i)
+        SPDLOG_DEBUG(i);
     }
     // li = {1,32,4,5,5,6};
     li.sort([](int a, int b) {return true; });
@@ -58,8 +67,7 @@ bool test_vector() {
 
     while (!st.empty())
     {
-        debug(st.top())
-            st.pop();
+        st.pop();
     }
 
     tstd::vector<tstd::vector<int>> v2;
@@ -95,7 +103,10 @@ int main()
     /*tstd::string s;
     tstd::string::value_type;*/
 
-    tstd::string s;
+    std::string s = "fdsaf";
+
+    spdlog::info("test for spd log {}", __FUNCTION__);
+
 
     return 0;
 }

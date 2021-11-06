@@ -2,9 +2,9 @@
 #define CN_HUST_LYH_TINYVECTOR_H
 
 #include <iostream>
-#include "util.h"
-#include "allocator.h"
-#include "loging.h"
+#include "tiny_util.h"
+#include "tiny_allocator.h"
+#include "tiny_loging.h"
 
 using util::println;
 
@@ -382,7 +382,7 @@ void vector<T>::pop_back() {
 	if (_end != _begin) {
 		--_end;
 	}
-	debug("pop_back()")
+	spdlog::info("pop_back()");
 }
 
 }
