@@ -16,9 +16,16 @@
     << " line:" << __LINE__ << "]: ";   \
 }
 
+#define SUFFIX(msg) std::string(msg).append("  <")\
+                    .append(__FILENAME__).append("> <").append(__FUNCTION__)\
+                    .append("> <").append(std::to_string(__LINE__))\
+                    .append(">").c_str()
 
-#define INFO(...) spdlog::info(## __VA_ARGS__)
-#define DEBUG(...) spdlog::debug(## __VA_ARGS__)
+#define INFO(...) 
+
+//#define INFO(...) spdlog::info(## __VA_ARGS__)
+
+#define DEBUG(...) {    std::cout<<SUFFIX(msg)<<" "; spdlog::debug(## __VA_ARGS__)}
 #define WARN(...) spdlog::warn(## __VA_ARGS__)
 #define ERR(...) spdlog::error(## __VA_ARGS__)
 

@@ -282,18 +282,22 @@ public:
 	// TODO[lyh][1]: Modifiers
 
 	void clear() noexcept{
-		
-	}
-
-	iterator insert(iterator pos,const_reference val) {
-	
+		delete _begin;
+		_begin = nullptr;
+		_end = nullptr;
+		_cap = nullptr;
 	}
 
 	iterator insert(const_iterator pos,const_reference val) {
-	
+		
+		return emplace(pos,val);
 	}
 
-	iterator insert(const_iterator pos, T&& value) {}
+
+	iterator insert(const_iterator pos, value_type&& val) {
+		auto it = const_cast<iterator>(pos);
+		return insert(it, val);
+	}
 
 	void assign(size_type n, const T& value) {
 
@@ -323,11 +327,46 @@ public:
 		assert(!(last < first));
 		//copy_assign(first, last, iterator_category(first));
 		// TOOD[lyh][0]: 还没有实现
+		
+		vector t;
+		this->swap(t);
+
+		for (auto it = first; it != last; ++it) {
+			push_back( value_type(* it) );
+		}
 	}
 
 	template< class... Args >
 	iterator emplace(const_iterator pos, Args&&... args) {
-		return nullptr;
+		int n = pos - _begin;
+
+		if (end() >= _cap) {
+			expand();
+		}
+		if (_end < _cap) {
+
+		}
+		else {
+
+		}
+
+		for (auto it = end(); it != begin() + n; --it) {
+			*it = *(it - 1);
+		}
+
+		*(begin() + n) = value_type(std::forward<Args>(args)...);
+		++_end;
+		return begin() + n;
+	}
+
+	template< class... Args >
+	void emplace_back(Args&&... args) {
+		if (_end == _cap) {
+			expand();
+		}
+		util::construct(_end,  value_type(std::forward<Args>( args)...) );
+		//*_end = val;
+		++_end;
 	}
 
 	iterator erase(iterator pos) {
@@ -362,6 +401,7 @@ public:
 			++t;
 			++first;
 		}
+		_end = first;
 		return ret;
 	}
 
@@ -382,20 +422,12 @@ public:
 	}
 
 	void push_back(const_reference val) {
-		if (_end == _cap) {
-			expand();
-		}
-		util::construct(_end, val);
-		//*_end = val;
-		++_end;
+		emplace_back(val);
 	}
 
 	void push_back(T&& val) {
-		push_back(val);
+		emplace_back(val);
 	}
-
-	template< class... Args >
-	void emplace_back(Args&&... args) {}
 
 	void pop_back() {
 

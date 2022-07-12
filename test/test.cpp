@@ -19,37 +19,10 @@
 
 #pragma warning(disable:4996)
 
-#define SUFFIX(msg) std::string(msg).append("  <")\
-                    .append(__FILENAME__).append("> <").append(__FUNCTION__)\
-                    .append("> <").append(std::to_string(__LINE__))\
-                    .append(">").c_str()
 
 using std::cin;
 using std::cout;
 using std::endl;
-
-
-bool test_max() {
-    auto m = std::max({ 1,2,43,4,5,6,7,8,2,2, });
-    INFO("m: {}",m);
-    return true;
-}
-
-bool test_list() {
-
-    std::list<int> li = { 1,2,4,5,6,7 };
-    for (auto i : li) {
-        DEBUG(i);
-    }
-    // li = {1,32,4,5,5,6};
-    li.sort([](int a, int b) {return true; });
-
-    return true;
-}
-
-template<typename T>
-using Vec = tstd::vector<T>;
-
 
 template<typename T>
 void showArr(T& arr) {
@@ -59,54 +32,140 @@ void showArr(T& arr) {
     cout << endl;
 }
 
-bool test_vector() {
+void test_string() {
 
-    std::stack<int, tstd::vector<int>>st;
+    std::cout << "[===============================================================]" << std::endl;
+    std::cout << "[----------------- Run container test : string -----------------]" << std::endl;
+    std::cout << "[-------------------------- API test ---------------------------]" << std::endl;
 
-    st.push(1);
-    st.push(2);
-    st.push(3);
+    tstd::string s = "this is a test string";
 
-    while (!st.empty())
-    {
-        st.pop();
-    }
+    cout << s << endl;
 
-    tstd::vector<tstd::vector<int>> v2;
-    v2.push_back({ 1,2 });
-    v2.push_back({ 1,2 });
-    return true;
 
+    //const char* s = "abcdefg";
+    //tstd::string str;
+    //tstd::string str1(5, 'a');
+    //tstd::string str2(str1, 3);
+    //tstd::string str3(str1, 0, 3);
+    //tstd::string str4("abc");
+    //tstd::string str5("abcde", 3);
+    //tstd::string str6(s, s + 5);
+    //tstd::string str7(str1);
+    //tstd::string str8(std::move(str1));
+    //tstd::string str9;
+    //str9 = str2;
+    //tstd::string str10;
+    //str10 = std::move(str2);
+    //tstd::string str11;
+    //str11 = "123";
+    //tstd::string str12;
+    //str12 = 'A';
+
+    //STR_FUN_AFTER(str, str = 'a');
+    //STR_FUN_AFTER(str, str = "string");
+    //FUN_VALUE(*str.begin());
+    //FUN_VALUE(*str.rbegin());
+    //FUN_VALUE(*(str.end() - 1));
+    //FUN_VALUE(*(str.rend() - 1));
+    //FUN_VALUE(str.front());
+    //FUN_VALUE(str.back());
+    //FUN_VALUE(str[1]);
+    //FUN_VALUE(str.at(2));
+    //STR_COUT(str.data());
+    //STR_COUT(str.c_str());
+    //std::cout << std::boolalpha;
+    //FUN_VALUE(str.empty());
+    //std::cout << std::noboolalpha;
+    //FUN_VALUE(str.size());
+    //FUN_VALUE(str.length());
+    //FUN_VALUE(str.capacity());
+    //FUN_VALUE(str.max_size());
+    //STR_FUN_AFTER(str, str.shrink_to_fit());
+    //FUN_VALUE(str.capacity());
+
+    //STR_FUN_AFTER(str, str.insert(str.begin(), 'a'));
+    //STR_FUN_AFTER(str, str.insert(str.end(), 3, 'x'));
+    //STR_FUN_AFTER(str, str.insert(str.end(), s, s + 3));
+    //STR_FUN_AFTER(str, str.erase(str.begin()));
+    //STR_FUN_AFTER(str, str.erase(str.begin(), str.begin() + 3));
+    //STR_FUN_AFTER(str, str.clear());
+    //STR_FUN_AFTER(str, str.push_back('s'));
+    //STR_FUN_AFTER(str, str.push_back('t'));
+    //STR_FUN_AFTER(str, str.pop_back());
+    //STR_FUN_AFTER(str, str.append(1, 't'));
+    //STR_FUN_AFTER(str, str.append(str4));
+    //STR_FUN_AFTER(str, str.append(str4, 1));
+    //STR_FUN_AFTER(str, str.append(str4, 2, 1));
+    //STR_FUN_AFTER(str, str.append("str"));
+    //STR_FUN_AFTER(str, str.append("inging", 3));
+    //STR_FUN_AFTER(str, str.append(s, s + 3));
+    //STR_FUN_AFTER(str, str.resize(10));
+    //FUN_VALUE(str.size());
+    //STR_FUN_AFTER(str, str.resize(20, 'x'));
+    //FUN_VALUE(str.size());
+    //STR_FUN_AFTER(str, str.clear());
+
+    //STR_FUN_AFTER(str, str = "string");
+    //STR_FUN_AFTER(str3, str3 = "astrings");
+
+    //FUN_VALUE(str.substr(0));
+    //FUN_VALUE(str.substr(3));
+    //FUN_VALUE(str.substr(0, 3));
+    //FUN_VALUE(str.substr(0, 10));
+    //STR_FUN_AFTER(str, str.replace(0, 6, str3));
+    //STR_FUN_AFTER(str, str.replace(str.end() - 1, str.end(), str3));
+    //STR_FUN_AFTER(str, str.replace(0, 1, "my "));
+    //STR_FUN_AFTER(str, str.replace(str.end() - 8, str.end(), " test"));
+    //STR_FUN_AFTER(str, str.replace(10, 4, "replace"));
+    //STR_FUN_AFTER(str, str.replace(str.end(), str.end(), " test"));
+    //STR_FUN_AFTER(str, str.replace(0, 2, 3, '6'));
+    //STR_FUN_AFTER(str, str.replace(str.begin(), str.begin() + 3, 6, '6'));
+    //STR_FUN_AFTER(str, str.replace(0, 3, str3, 1, 3));
+    //STR_FUN_AFTER(str, str.replace(str.begin(), str.begin() + 6, s, s + 3));
+    //STR_FUN_AFTER(str, str.reverse());
+    //STR_FUN_AFTER(str, str.reverse());
+
+    //STR_FUN_AFTER(str, str = "abcabc stringgg");
+    //STR_FUN_AFTER(str3, str3 = "abc");
+    //FUN_VALUE(str.find('a'));
+    //FUN_VALUE(str.find('a', 3));
+    //FUN_VALUE(str.find('a', 4));
+    //FUN_VALUE(str.find("abc"));
+    //FUN_VALUE(str.find("abc", 1));
+    //FUN_VALUE(str.find("abc", 1, 1));
+    //FUN_VALUE(str.find(str3));
+    //FUN_VALUE(str.find(str3, 1));
+
+    //FUN_VALUE(str.count('a'));
+    //FUN_VALUE(str.count('a', 2));
+    //FUN_VALUE(str.count('d', 10));
+
+    //STR_FUN_AFTER(str, str.swap(str3));
+    //FUN_VALUE(str.size());
+    //FUN_VALUE(str.length());
+    //FUN_VALUE(str.capacity());
+    //STR_FUN_AFTER(str, str += str);
+    //STR_FUN_AFTER(str, str += 'a');
+    //STR_FUN_AFTER(str, str += "bc");
+    //FUN_VALUE(str.size());
+    //FUN_VALUE(str.length());
+    //FUN_VALUE(str.capacity());
+    //STR_FUN_AFTER(str, str.shrink_to_fit());
+    //FUN_VALUE(str.capacity());
+    //STR_FUN_AFTER(str, str.reserve(50));
+    //FUN_VALUE(str.capacity());
+    //STR_FUN_AFTER(str3, str3 = "test");
+    //STR_FUN_AFTER(str4, str4 = " ok!");
+    //std::cout << " str3 + '!' : " << str3 + '!' << std::endl;
+    //std::cout << " '#' + str3 : " << '#' + str3 << std::endl;
+    //std::cout << " str3 + \" success\" : " << str3 + " success" << std::endl;
+    //std::cout << " \"My \" + str3 : " << "My " + str3 << std::endl;
+    //std::cout << " str3 + str4 : " << str3 + str4 << std::endl;
 }
 
-void test_destory() {
-
-    tstd::vector<int> v2 = { 1,2,3 };
-
-    for (auto i : v2) {
-        cout << i << " ";
-    }
-    cout << endl;
-}
-
-int main()
-{
-
-    // test_max();
-    // test_list();
-    // commit 1
-    // commit 2
+void test_vec() {
     
-    //std::vector<int>v;
-    //debug(util::getNameOfT(tstd::vector<int>::value_type{}));
-
-    //test_vector();
-    //test_destory();
-    /*tstd::string s;
-    tstd::string::value_type;*/
-
-    //std::string s = "fdsaf";
-
     std::cout << "[===============================================================]\n";
     std::cout << "[----------------- Run container test : vector -----------------]\n";
     std::cout << "[-------------------------- API test ---------------------------]\n";
@@ -128,19 +187,20 @@ int main()
     FUN_AFTER(v1, v1.emplace(v1.begin(), 0));
     FUN_AFTER(v1, v1.emplace_back(6));
     FUN_AFTER(v1, v1.push_back(6));
-    //FUN_AFTER(v1, v1.insert(v1.end(), 7));
-    //FUN_AFTER(v1, v1.insert(v1.begin() + 3, 2, 3));
-    //FUN_AFTER(v1, v1.insert(v1.begin(), a, a + 5));
+    FUN_AFTER(v1, v1.insert(v1.end(), 7));
     FUN_AFTER(v1, v1.pop_back());
     FUN_AFTER(v1, v1.erase(v1.begin()));
     FUN_AFTER(v1, v1.erase(v1.begin(), v1.begin() + 2));
     FUN_AFTER(v1, v1.erase(v1.begin(), v1.begin() + 2));
     
-    //using it = std::vector<int>::iterator;
-    
-    //cout << (std::_Is_input_iter_v<it> == true) << endl;
+}
 
-    //INFO("_Is_input_iter_v:{}", std::_Is_input_iter_v<it> );
+int main()
+{
+
+    //test_vec();
+
+    test_string();
 
     return 0;
 }
