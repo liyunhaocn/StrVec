@@ -2,6 +2,10 @@
 #define CN_HUST_LYH_TINYVECTOR_H
 
 #include <iostream>
+#include <iterator>
+#include <type_traits>
+#include <xutility>
+
 #include "tiny_util.h"
 #include "tiny_allocator.h"
 #include "tiny_loging.h"
@@ -15,6 +19,9 @@ using util::println;
 /// </summary>
 
 namespace tstd {
+
+template <class _Ty>
+struct _Is_input_iter : std::bool_constant< std::_Is_input_iter_v<_Ty> > {};
 
 template<typename T>
 class vector {
@@ -113,18 +120,142 @@ public:
 
 #pragma endregion
 
-	vector();
-	vector(size_type n);
-	vector(size_type n, value_type val);
-	vector(std::initializer_list<value_type> li);
+	vector() :_begin(nullptr), _end(nullptr), _cap(nullptr) {
 
-	vector(const vector& lval);
-	vector(vector&& rval) noexcept;
+		INFO("call: Vector()");
+	}
 
-	vector& operator = (const vector& lval);
-	vector& operator = (vector&& rval) noexcept;
+	vector(size_type n) {
 
-	bool expand();
+		INFO("call:Vector(size_t _len)");
+		_begin = allocator<value_type>::allocate(n);
+		_end = _begin + n;
+		_cap = _begin + n;
+		std::fill(_begin, _end, value_type());
+	}
+
+	vector(size_type n, value_type val) {
+
+		INFO("call:Vector(size_t _len, int val)");
+		_begin = allocator<value_type>::allocate(n);
+		_end = _begin + n;
+		_cap = _begin + n;
+		std::fill(_begin, _end, val);
+	}
+
+	vector(std::initializer_list<value_type> li) {
+
+		INFO("call:Vector(std::initializer_list<value_type> li)");
+
+		size_type n = li.end() - li.begin();
+
+		_begin = allocator<value_type>::allocate(n);
+		_end = begin();
+		_cap = _begin + n;
+		for (auto& i : li) {
+			util::construct(_end, i);
+			++_end;
+		}
+	}
+
+	// TODO[lyh][1]: 这里的is_input_iterator用的不对改为了_Is_iterator
+	//template <class Iter, 
+	//	typename std::enable_if< tstd::_Is_input_iter<Iter>::value, int>::type = 0>
+
+	template <class Iter, 
+	typename std::enable_if< std::_Is_iterator<Iter>::value, int>::type = 0>
+	
+	//template <class Iter>
+		vector(Iter first, Iter last)
+	{
+		std::_Is_input_iter_v<Iter>;
+		assert(!(last < first));
+		int n = last - first;
+		vector t(n, value_type());
+		int idx = 0;
+		for (auto it = first; it != last; ++it) {
+			//t[idx] = *it;
+			++idx;
+		}
+		this->swap(t);
+	}
+
+	vector(const vector& lval) {
+
+		INFO("call:Vector(const Vector& lval)");
+		size_type n = lval.size();
+		_begin = allocator<value_type>::allocate(n);
+		_cap = _begin + n;
+		_end = _begin;
+		for (size_t i = 0; i < lval.size(); ++i) {
+			util::construct(_end, lval[i]);
+			++_end;
+		}
+	}
+
+	vector(vector&& rval) noexcept {
+		INFO("call:Vector(Vector&& rval) noexcept");
+		rval._begin = nullptr;
+		rval._end = nullptr;
+		rval._cap = nullptr;
+	}
+
+	~vector() {
+
+		//INFO("call:~Vector()");
+		//INFO("_begin:{}", _begin);
+		//INFO("_begin == nullptr:{}", (_begin == nullptr));
+
+		if (typeid(value_type).name() == typeid(int).name()) {
+			;
+		}
+		else {
+
+		}
+
+		delete[] _begin;
+
+		_begin = nullptr;
+		_end = nullptr;
+		_cap = nullptr;
+	}
+
+	vector& operator = (const vector& lval) {
+
+		INFO("call:operator =(const Vector& lval)");
+
+		if (this != &lval) {
+			delete[] _begin;
+			size_type n = lval.size();
+			_begin = allocator<value_type>::allocate(n);
+			_end = _begin + n;
+			_cap = _begin + n;
+
+			for (size_t i = 0; i < lval.size(); ++i) {
+				(*this)[i] = lval[i];
+			}
+		}
+
+		return *this;
+	}
+
+	vector& operator = (vector&& rval) noexcept {
+
+		INFO("call:operator =(Vector&& rval) noexcept");
+
+		if (this != &rval) {
+			delete[] _begin;
+			_begin = rval._begin;
+			_end = rval._end;
+			_cap = rval._cap;
+
+			rval._begin = nullptr;
+			rval._end = nullptr;
+			rval._cap = nullptr;
+		}
+		return *this;
+
+	}
 
 #pragma region Iterators:
 
@@ -164,17 +295,100 @@ public:
 
 	iterator insert(const_iterator pos, T&& value) {}
 
+	void assign(size_type n, const T& value) {
+
+		if (n > capacity())
+		{
+			vector tmp(n, value);
+			swap(tmp);
+		}
+		else if (n > size())
+		{
+			std::fill(begin(), end(), value);
+			_end = std::uninitialized_fill_n(_end, n - size(), value);
+		}
+		else
+		{
+			erase(std::fill_n(_begin, n, value), _end);
+		}
+	}
+	
+	// TODO[lyh][0]: 这里的is_input_iterator用的不对改为了_Is_iterator
+	//template <class Iter, typename std::enable_if<
+	//	std::is_input_iterator<Iter>::value, int>::type = 0>	
+	template <class Iter, typename std::enable_if<
+		std::_Is_iterator<Iter>::value, int>::type = 0>	
+	//template <class Iter>
+	void assign(Iter first, Iter last) {
+		assert(!(last < first));
+		//copy_assign(first, last, iterator_category(first));
+		// TOOD[lyh][0]: 还没有实现
+	}
+
 	template< class... Args >
-	iterator emplace(const_iterator pos, Args&&... args) {}
+	iterator emplace(const_iterator pos, Args&&... args) {
+		return nullptr;
+	}
 
-	iterator erase(iterator pos) {}
-	iterator erase(const_iterator pos) {}
+	iterator erase(iterator pos) {
 
-	iterator erase(iterator first, iterator last) {}
+		assert(pos >= begin() && pos < end());
+		
+		for (iterator it = pos; it + 1 != end(); ++it) {
+			*it = *(it + 1);
+		}
+		--_end;
+		return pos;
+	}
 
-	iterator erase(const_iterator first, const_iterator last) {}
+	iterator erase(const_iterator pos) {
 
-	void push_back(const_reference val);
+		assert(pos >= begin() && pos < end());
+		for (iterator it = pos; it + 1 != end(); ++it) {
+			*it = *(it + 1);
+		}
+		--_end;
+		return pos;
+	}
+
+	iterator erase(iterator first, iterator last) {
+
+		assert(first >= begin() && last <= end() && !(last < first));
+
+		iterator t = last;
+		iterator ret = first;
+		for (; t != _end;) {
+			*first = *t;
+			++t;
+			++first;
+		}
+		return ret;
+	}
+
+	iterator erase(const_iterator first, const_iterator last) {
+
+		assert(first >= begin() && last <= end() && !(last < first));
+
+		size_t ranglen = last - first;
+
+		iterator t = last;
+		iterator ret = first;
+		for (; t != _end;) {
+			*first = *t;
+			++t;
+			++first;
+		}
+		return begin() + ranglen;
+	}
+
+	void push_back(const_reference val) {
+		if (_end == _cap) {
+			expand();
+		}
+		util::construct(_end, val);
+		//*_end = val;
+		++_end;
+	}
 
 	void push_back(T&& val) {
 		push_back(val);
@@ -183,14 +397,27 @@ public:
 	template< class... Args >
 	void emplace_back(Args&&... args) {}
 
-	void pop_back();
+	void pop_back() {
+
+		assert(end() > begin());
+
+		if (_end != _begin) {
+			--_end;
+		}
+		INFO("pop_back()");
+	}
 
 	void resize(size_type count) {}
 
 	void resize(size_type count, T value = T()) {}
+
 	void resize(size_type count, const value_type& value) {}
 
-	void swap(vector& other) {}
+	void swap(vector& other) {
+		std::swap(this->_begin,other._begin);
+		std::swap(this->_end,other._end);
+		std::swap(this->_cap,other._cap);
+	}
 
 #pragma endregion 
 // Modifiers
@@ -199,191 +426,47 @@ public:
 
 	void destory(pointer ptr);*/
 
-	~vector();
-
 private:
 
 	iterator _begin;
 	iterator _end;
 	iterator _cap;
 
-};
+private:
 
-template<typename T>
-bool vector<T>::expand() {
-	
-	println("call:expand()");
-	println("value_type.name: ", typeid(value_type).name());
-	size_type new_size = std::max(size() + 1, capacity() * 2);
-	auto new_begin = allocator<value_type>::allocate(new_size);
-	auto new_end = new_begin;
-	auto new_cap = new_begin + new_size;
+	bool expand() {
 
-	for (auto i = _begin; i != _end; ++i) {
-		util::construct(new_end,*i);
-		//*new_end = *i;
-		++new_end;
-	}
-	delete [] _begin;
+		INFO("call:expand()");
+		INFO("value_type.name: ", typeid(value_type).name());
+		size_type new_size = std::max(size() + 1, capacity() * 2);
+		auto new_begin = allocator<value_type>::allocate(new_size);
+		auto new_end = new_begin;
+		auto new_cap = new_begin + new_size;
 
-	_begin = new_begin;
-	_end = new_end;
-	_cap = new_cap;
-
-	return true;
-}
-
-
-template<typename T>
-void vector<T>::push_back(const_reference val) {
-	if (_end == _cap) {
-		expand();
-	}
-	util::construct(_end,val);
-	//*_end = val;
-	++_end;
-}
-
-//template<typename T>
-//void vector<T>::show() {
-//	std::cout << "[";
-//	for (iterator it = _begin; it != _end; ++it) {
-//		std::cout << *it << ",";
-//	}
-//	std::cout << "]" << std::endl;
-//}
-
-template<typename T>
-vector<T>::vector() :_begin(nullptr), _end(nullptr), _cap(nullptr) {
-	println("call: Vector()");
-}
-
-template<typename T>
-vector<T>::vector(size_type n) {
-	println("call:Vector(size_t _len)");
-	_begin = allocator<value_type>::allocate(n);
-	_end = _begin + n;
-	_cap = _begin + n;
-	std::fill(_begin, _end, value_type());
-}
-
-template<typename T>
-vector<T>::vector(std::initializer_list<value_type> li) {
-
-	println("call:Vector(std::initializer_list<value_type> li)");
-
-	size_type n = li.end() - li.begin();
-
-	_begin = allocator<value_type>::allocate(n);
-	_end = begin();
-	_cap = _begin + n;
-	for (auto& i : li) {
-		util::construct(_end ,i);
-		++_end;
-	}
-}
-
-template<typename T>
-vector<T>::vector(size_type n, value_type val) {
-
-	println("call:Vector(size_t _len, int val)");
-	_begin = allocator<value_type>::allocate(n);
-	_end = _begin + n;
-	_cap = _begin + n;
-	std::fill(_begin, _end, val);
-}
-
-template<typename T>
-vector<T>::vector(const vector<T>& lval) {
-
-	println("call:Vector(const Vector& lval)");
-	size_type n = lval.size();
-	_begin = allocator<value_type>::allocate(n);
-	_cap = _begin + n;
-	_end = _begin;
-	for (size_t i = 0; i < lval.size(); ++i) {
-		util::construct(_end, lval[i]);
-		++_end;
-	}
-}
-
-template<typename T>
-vector<T>::vector(vector<T>&& rval) noexcept :_begin(rval._begin), _end(rval._end), _cap(rval._cap) {
-
-	println("call:Vector(Vector&& rval) noexcept");
-	rval._begin = nullptr;
-	rval._end = nullptr;
-	rval._cap = nullptr;
-}
-
-template<typename T>
-vector<T>& vector<T>::operator = (const vector<T>& lval) {
-
-	println("call:operator =(const Vector& lval)");
-
-	if (this != &lval) {
-		delete[] _begin;
-		size_type n = lval.size();
-		_begin = allocator<value_type>::allocate(n);
-		_end = _begin + n;
-		_cap = _begin + n;
-
-		for (size_t i = 0; i < lval.size(); ++i) {
-			(*this)[i] = lval[i];
+		for (auto i = _begin; i != _end; ++i) {
+			util::construct(new_end, *i);
+			//*new_end = *i;
+			++new_end;
 		}
-	}
-
-	return *this;
-}
-
-template<typename T> 
-vector<T>& vector<T>::operator = (vector<T>&& rval) noexcept {
-
-	println("call:operator =(Vector&& rval) noexcept");
-
-	if (this != &rval) {
 		delete[] _begin;
-		_begin = rval._begin;
-		_end = rval._end;
-		_cap = rval._cap;
 
-		rval._begin = nullptr;
-		rval._end = nullptr;
-		rval._cap = nullptr;
-	}
-	return *this;
-}
+		_begin = new_begin;
+		_end = new_end;
+		_cap = new_cap;
 
-
-template<typename T>
-vector<T>::~vector() {
-
-	println("call:~Vector()");
-	println("_begin", _begin);
-
-	println("_begin == nullptr",_begin == nullptr);
-	if (typeid(value_type).name() == typeid(int).name()) {
-		;
-	}
-	else {
-		
+		return true;
 	}
 
-	delete[] _begin;
+	//template<typename T>
+	//void vector<T>::show() {
+	//	std::cout << "[";
+	//	for (iterator it = _begin; it != _end; ++it) {
+	//		std::cout << *it << ",";
+	//	}
+	//	std::cout << "]" << std::endl;
+	//}
 
-	_begin = nullptr;
-	_end = nullptr;
-	_cap = nullptr;
-}
-
-
-template<typename T>
-void vector<T>::pop_back() {
-	if (_end != _begin) {
-		--_end;
-	}
-	spdlog::info("pop_back()");
-}
+};
 
 }
 

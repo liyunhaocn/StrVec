@@ -1,3 +1,4 @@
+
 #ifndef CN_HUST_LYH_STRING_H
 #define CN_HUST_LYH_STRING_H
 

@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <string>
+#include <tinystl/tiny_loging.h>
 
 namespace util {
 
@@ -35,8 +36,8 @@ namespace util {
 
 	template<typename T>
 	bool construct(T* ptr,T val) {
-		println("construct: ",typeid(T).name());
-		println("ptr: ",ptr);
+		INFO("construct: {} ",typeid(T).name());
+		//INFO("ptr: {}",std::to_string(&ptr));
 		::new(ptr)T(val);
 		return true;
 	}
