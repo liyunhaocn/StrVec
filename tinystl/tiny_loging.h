@@ -21,11 +21,11 @@
                     .append("> <").append(std::to_string(__LINE__))\
                     .append(">").c_str()
 
-#define INFO(...) 
+//#define INFO(...) 
 
-//#define INFO(...) spdlog::info(## __VA_ARGS__)
+#define INFO(...)   spdlog::info(## __VA_ARGS__)
 
-#define DEBUG(...) {    std::cout<<SUFFIX(msg)<<" "; spdlog::debug(## __VA_ARGS__)}
+#define DEBUG(...) spdlog::debug(## __VA_ARGS__)
 #define WARN(...) spdlog::warn(## __VA_ARGS__)
 #define ERR(...) spdlog::error(## __VA_ARGS__)
 
@@ -48,6 +48,23 @@
   COUT(con);                                             \
 } while(0)
 
+// 输出容器调用函数的值
+#define FUN_VALUE(fun) do {                              \
+  std::string fun_name = #fun;                           \
+  std::cout << " " << fun_name << " : " << fun << "\n";  \
+} while(0)
+
+#define STR_FUN_AFTER(str, fun) do {                     \
+  std::string fun_name = #fun;                           \
+  std::cout << " After " << fun_name << " :\n";          \
+  fun;                                                   \
+  STR_COUT(str);                                         \
+} while(0)
+
+#define STR_COUT(str) do {                               \
+  std::string str_name = #str;                           \
+  std::cout << " " << str_name << " : " << str << "\n";  \
+} while(0)
 
 //#define debug(x) std::cout<<#x<<": "<<(x)<<std::endl;
 

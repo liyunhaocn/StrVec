@@ -36,7 +36,7 @@ namespace util {
 
 	template<typename T>
 	bool construct(T* ptr,T val) {
-		INFO("construct: {} ",typeid(T).name());
+		//INFO("construct: {} ",typeid(T).name());
 		//INFO("ptr: {}",std::to_string(&ptr));
 		::new(ptr)T(val);
 		return true;

@@ -5,6 +5,7 @@
 #include <cstdio>
 #include <cstdarg>
 #include <stack>
+#include <string>
 
 #include <xutility>
 
@@ -19,10 +20,16 @@
 
 #pragma warning(disable:4996)
 
-
+/*
+* ²âÊÔÑùÀýÀ´×Ô https://github.com/Alinshans/MyTinySTL
+* 
+* 
+* 
+*/
 using std::cin;
 using std::cout;
 using std::endl;
+
 
 template<typename T>
 void showArr(T& arr) {
@@ -37,52 +44,47 @@ void test_string() {
     std::cout << "[===============================================================]" << std::endl;
     std::cout << "[----------------- Run container test : string -----------------]" << std::endl;
     std::cout << "[-------------------------- API test ---------------------------]" << std::endl;
+    
 
-    tstd::string s = "this is a test string";
+    const char* s = "abcdefg";
+    tstd::string str;
+    tstd::string str1(5, 'a');
 
-    cout << s << endl;
+    std::string a = "fdsafsdfsad";
+    std::string b(a,4);
+    tstd::string str2(str1, 3);
 
+    tstd::string str3(str1, 0, 3);
+    tstd::string str4("abc");
+    tstd::string str5("abcde", 3);
+    tstd::string str6(s, s + 5);
+    tstd::string str7(str1);
+    tstd::string str8(std::move(str1));
+    tstd::string str9;
+    str9 = str2;
+    tstd::string str10;
+    str10 = std::move(str2);
+    tstd::string str11;
+    str11 = "123";
+    tstd::string str12;
+    str12 = 'A';
 
-    //const char* s = "abcdefg";
-    //tstd::string str;
-    //tstd::string str1(5, 'a');
-    //tstd::string str2(str1, 3);
-    //tstd::string str3(str1, 0, 3);
-    //tstd::string str4("abc");
-    //tstd::string str5("abcde", 3);
-    //tstd::string str6(s, s + 5);
-    //tstd::string str7(str1);
-    //tstd::string str8(std::move(str1));
-    //tstd::string str9;
-    //str9 = str2;
-    //tstd::string str10;
-    //str10 = std::move(str2);
-    //tstd::string str11;
-    //str11 = "123";
-    //tstd::string str12;
-    //str12 = 'A';
-
-    //STR_FUN_AFTER(str, str = 'a');
-    //STR_FUN_AFTER(str, str = "string");
-    //FUN_VALUE(*str.begin());
-    //FUN_VALUE(*str.rbegin());
-    //FUN_VALUE(*(str.end() - 1));
-    //FUN_VALUE(*(str.rend() - 1));
-    //FUN_VALUE(str.front());
-    //FUN_VALUE(str.back());
-    //FUN_VALUE(str[1]);
-    //FUN_VALUE(str.at(2));
-    //STR_COUT(str.data());
-    //STR_COUT(str.c_str());
-    //std::cout << std::boolalpha;
-    //FUN_VALUE(str.empty());
-    //std::cout << std::noboolalpha;
-    //FUN_VALUE(str.size());
-    //FUN_VALUE(str.length());
-    //FUN_VALUE(str.capacity());
-    //FUN_VALUE(str.max_size());
-    //STR_FUN_AFTER(str, str.shrink_to_fit());
-    //FUN_VALUE(str.capacity());
+    STR_FUN_AFTER(str, str = "string");
+    FUN_VALUE(*str.rbegin());
+    FUN_VALUE(*(str.end() - 1));
+    FUN_VALUE(*(str.rend() - 1));
+    FUN_VALUE(str.front());
+    FUN_VALUE(str.back());
+    FUN_VALUE(str[1]);
+    STR_COUT(str.c_str());
+    std::cout << std::boolalpha;
+    FUN_VALUE(str.empty());
+    std::cout << std::noboolalpha;
+    FUN_VALUE(str.size());
+    FUN_VALUE(str.length());
+    FUN_VALUE(str.capacity());
+    FUN_VALUE(str.max_size());
+    FUN_VALUE(str.capacity());
 
     //STR_FUN_AFTER(str, str.insert(str.begin(), 'a'));
     //STR_FUN_AFTER(str, str.insert(str.end(), 3, 'x'));
@@ -144,7 +146,7 @@ void test_string() {
     //STR_FUN_AFTER(str, str.swap(str3));
     //FUN_VALUE(str.size());
     //FUN_VALUE(str.length());
-    //FUN_VALUE(str.capacity());
+    //FUN_VsALUE(str.capacity());
     //STR_FUN_AFTER(str, str += str);
     //STR_FUN_AFTER(str, str += 'a');
     //STR_FUN_AFTER(str, str += "bc");
@@ -200,7 +202,33 @@ int main()
 
     //test_vec();
 
-    test_string();
+    tstd::string s1 = "fdasfsada";
+    tstd::string s2 = s1;
+
+    INFO("s1:{}",s1);
+    INFO("s2:{}",s2);
+    s1[0] = '5';
+
+    INFO("s1:{}", s1);
+    INFO("s2:{}", s2);
+
+    tstd::vector< tstd::string > v;
+
+    v.push_back("a");
+    v.push_back("bb");
+    v.push_back("ccc");
+    v.push_back("dddd");
+
+    for (auto i : v) {
+        INFO("ele: {}",i);
+    }
+
+    auto v2 = v;
+
+    for (auto i : v2) {
+        INFO("ele: {}", i);
+    }
+    //test_string();
 
     return 0;
 }
