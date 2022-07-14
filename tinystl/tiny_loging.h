@@ -16,18 +16,25 @@
     << " line:" << __LINE__ << "]: ";   \
 }
 
-#define SUFFIX(msg) std::string(msg).append("  <")\
-                    .append(__FILENAME__).append("> <").append(__FUNCTION__)\
-                    .append("> <").append(std::to_string(__LINE__))\
+#define SUFFIX(msg) std::string(msg)                    \
+                    .append("  <")                      \
+                    .append(__FILENAME__)               \
+                    .append("> <")                      \
+                    .append(__FUNCTION__)               \
+                    .append("> <")                      \
+                    .append(std::to_string(__LINE__))   \
                     .append(">").c_str()
 
-//#define INFO(...) 
+//#define POSINFO printf("[%s][%s][%s][%d]", __DATE__, __TIME__, __FILE__, __LINE__);
+#define POSINFO printf("[%s][%d]",__FILE__, __LINE__);
 
-#define INFO(...)   spdlog::info(## __VA_ARGS__)
+#define INFO(...) 
 
-#define DEBUG(...) spdlog::debug(## __VA_ARGS__)
-#define WARN(...) spdlog::warn(## __VA_ARGS__)
-#define ERR(...) spdlog::error(## __VA_ARGS__)
+#define INFO(...) SPDLOG_INFO(## __VA_ARGS__)
+
+#define DEBUG(...) SPDLOG_DEBUG(## __VA_ARGS__)
+#define WARN(...) SPDLOG_WARN(## __VA_ARGS__)
+#define ERR(...) SPDLOG_ERROR(## __VA_ARGS__)
 
 #define LOG_ERR(x) do{GET_FILE_INFO();std::cerr<<(x)<<std::endl;}while(0);
 

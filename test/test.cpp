@@ -197,16 +197,18 @@ void test_vec() {
     
 }
 
-int main()
-{
+void test_strvec() {
 
-    //test_vec();
+    //spdlog::set_pattern("[%H:%M:%S][%g][%#][%!] %v");
+    
+
+    SPDLOG_INFO("s1:{}", 111);
 
     tstd::string s1 = "fdasfsada";
     tstd::string s2 = s1;
 
-    INFO("s1:{}",s1);
-    INFO("s2:{}",s2);
+    INFO("s1:{}", s1);
+    INFO("s2:{}", s2);
     s1[0] = '5';
 
     INFO("s1:{}", s1);
@@ -220,7 +222,7 @@ int main()
     v.push_back("dddd");
 
     for (auto i : v) {
-        INFO("ele: {}",i);
+        INFO("ele: {}", i);
     }
 
     auto v2 = v;
@@ -228,6 +230,18 @@ int main()
     for (auto i : v2) {
         INFO("ele: {}", i);
     }
+
+}
+
+int main()
+{
+
+    spdlog::set_pattern("[%H:%M:%S][%g][%#] %v");
+
+    test_strvec();
+
+    //test_vec();
+
     //test_string();
 
     return 0;
