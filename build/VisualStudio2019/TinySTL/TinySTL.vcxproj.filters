@@ -15,6 +15,9 @@
     <ClCompile Include="..\..\..\test\test.cpp">
       <Filter>source</Filter>
     </ClCompile>
+    <ClCompile Include="std_string.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\tinystl\tiny_vector.h">
